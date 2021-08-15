@@ -51,6 +51,19 @@ def numero():
     x = random.randint(1, 100000)
     if (x <= 90000): return 2
     else : return 4
+    
+    
+    
+    
+    
+    
+    
+    
+def nuevo():
+    global mat, libres
+    x = random.randint(0, len(libres) - 1);
+    mat[libres[x][0]][libres[x][1]].val = numero()
+    libres.pop(x)
 
 
 
@@ -82,11 +95,8 @@ def setup():
             mat[i].append(a)
             x += 125
         y += 125
-    x = random.randint(0, len(libres) - 1);
-    mat[libres[x][0]][libres[x][1]].val = numero()
-    libres.pop(x)
-    x = random.randint(0, len(libres) - 1);
-    mat[libres[x][0]][libres[x][1]].val = numero()
+    nuevo()
+    nuevo()
     libres = []
     for i in range(4):
         for j in range(4):
@@ -126,8 +136,6 @@ def display():
             fill(0)
             if (a.val > 0):
                 text(str(a.val), a.x + 62, a.y + 62)
-    for i in libres:
-        mat[i[0]][i[1]].val = 512
 
 
 
@@ -147,12 +155,32 @@ def draw():
     
     
     
+
+def mover(i, j, dir):
+    global mat
+    velocidad = 25
+    suma = 0
+    #delay(500)
+    if (dir == 0):
+        while (suma < 125):
+            mat[i][j].y -= velocidad
+            suma += velocidad
+            display()
+
+
+
+
+
+
+
+
 #KeyPressed
 
 def keyPressed():
     global mat, puntaje
     global libres
-    
+    libres = []
+    cmat = [[j.val for j in i] for i in mat]
     if (keyCode == UP):
         for i in range(1, 4):
             for j in range(4):
@@ -161,12 +189,13 @@ def keyPressed():
                     mat[i - 1][j].val = mat[i][j].val
                     mat[i][j].val = 0
                     i -= 1
+                    mover(i, j, 0)
                 if (i > 0 and mat[i - 1][j].val == mat[i][j].val and mat[i - 1][j].par == False):
                     mat[i - 1][j].val *= 2
                     mat[i][j].val = 0
                     mat[i - 1][j].par = True
                 i = ci
-    if (keyCode == DOWN):
+    elif (keyCode == DOWN):
         for i in range(2, -1, -1):
             for j in range(4):
                 ci = i
@@ -179,7 +208,7 @@ def keyPressed():
                     mat[i][j].val = 0
                     mat[i + 1][j].par = True
                 i = ci
-    if (keyCode == LEFT):
+    elif (keyCode == LEFT):
         for i in range(4):
             for j in range(1, 4):
                 cj = j
@@ -192,7 +221,7 @@ def keyPressed():
                     mat[i][j].val = 0
                     mat[i][j - 1].par = True
                 j = cj
-    if (keyCode == RIGHT):
+    elif (keyCode == RIGHT):
         for i in range(4):
             for j in range(2, -1, -1):
                 cj = j
@@ -213,5 +242,11 @@ def keyPressed():
             if (i == 0 or i == 3 or k == 0 or k == 3):
                 if (j.val == 0):
                     libres.append([i, k])
-                    
     
+    mueve = False
+    for i in range(len(mat)):
+        for j in range(len(mat[0])):
+            if (mat[i][j].val != cmat[i][j]):
+                mueve = True
+    if (mueve):
+        nuevo()
