@@ -1,8 +1,4 @@
-'''
-Codigo de colores:
-vacio = 8E8E8E
-
-'''
+import random
 
 colores = {0: "#8E8E8E", 2: "#FBFED4",
            4: "#D6E701", 8: "#E89F0C",
@@ -11,58 +7,152 @@ colores = {0: "#8E8E8E", 2: "#FBFED4",
            256: "#CBC611", 512: "#DBD50F",
            1024: "#EEE943", 2048: "#F0EA29"}
 
+
+
+
+
+
+
+
+
+#Definicion de clase
+
 class cuadro:
     def __init__(self, px, py, val):
         self.x = px
         self.y = py
         self.col = 255
         self.val = val
-        self.col = colores[self.val]
         self.par = False
+
+
+
+
+
+
+
+#Variables Globales
 
 mat = []
 band = False
+puntaje = cuadro(220, 150, 0)
+libres = []
+
+
+
+
+
+
+
+
+#Funcion para generar numeros aleatorios
+
+def numero():
+    x = random.randint(1, 100000)
+    if (x <= 90000): return 2
+    else : return 4
+
+
+
+
+
+
+
+
+
+#Setup
 
 def setup():
-    global mat
-    global f
-    f = createFont("ArialBlack", 20, True)
-    size(550, 725)
+    global mat, puntaje, libres
+    global f, f2
+    f2 = createFont("Arial", 75, True)
+    f = createFont("ArialBlack", 40, True)
+    size(550, 825)
     background(255)
     stroke(0)
     strokeWeight(10)
     fill(150)
-    rect(25, 200, 500, 500)
-    x, y = [25, 200];
+    x, y = [25, 300];
     for i in range(4):
         mat.append([])
         x = 25
         for j in range(4):
-            if (i == 0 or i == 3 or j == 0 or j == 3): a = cuadro(x, y, 2)
-            else: a = cuadro(x, y, 0)
+            libres.append([i, j])
+            a = cuadro(x, y, 0)
             mat[i].append(a)
             x += 125
         y += 125
-    
+    x = random.randint(0, len(libres) - 1);
+    mat[libres[x][0]][libres[x][1]].val = numero()
+    libres.pop(x)
+    x = random.randint(0, len(libres) - 1);
+    mat[libres[x][0]][libres[x][1]].val = numero()
+    libres = []
+    for i in range(4):
+        for j in range(4):
+            if (i == 0 or i == 3 or j == 0 or j == 3):
+                if (mat[i][j].val == 0):
+                    libres.append([i, j])
+        
+            
+                
+            
+            
+            
+                
+#Display  
+  
 def display():
-    #delay(500)
-    global f
+    global f, f2
+    global puntaje
+    textFont(f2)
+    textAlign(CENTER)
+    text("Puntaje", 275, 100)
+    textAlign(CENTER, CENTER)
     textFont(f)
+    puntaje.col = colores[puntaje.val]
+    fill(puntaje.col)
+    rect(puntaje.x, puntaje.y, 125, 125)
+    fill(0)
+    text(str(puntaje.val), puntaje.x + 62, puntaje.y + 62)
     for i in range(4):
         for j in range(4):
             a = mat[i][j]
+            if (a.val > puntaje.val):
+                puntaje.val = a.val
             a.col = colores[a.val]
             fill(a.col)
             rect(a.x, a.y, 125, 125)
             fill(0)
             if (a.val > 0):
-                text(str(a.val), a.x + 75, a.y + 75)
+                text(str(a.val), a.x + 62, a.y + 62)
+    for i in libres:
+        mat[i[0]][i[1]].val = 512
+
+
+
+
+
+
+
+#Draw
 
 def draw():     
     display()
     
+    
+    
+    
+    
+    
+    
+    
+#KeyPressed
+
 def keyPressed():
-    global mat
+    global mat, puntaje
+    global libres
+    
     if (keyCode == UP):
         for i in range(1, 4):
             for j in range(4):
@@ -115,6 +205,13 @@ def keyPressed():
                     mat[i][j].val = 0
                     mat[i][j + 1].par = True
                 j = cj
-    for i in mat:
-        for j in i:
+    for i in range(len(mat)):
+        for k in range(len(mat[0])):
+            j = mat[i][k]
             j.par = False
+            puntaje.val = max(puntaje.val, j.val)
+            if (i == 0 or i == 3 or k == 0 or k == 3):
+                if (j.val == 0):
+                    libres.append([i, k])
+                    
+    
