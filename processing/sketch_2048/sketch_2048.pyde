@@ -21,6 +21,8 @@ class cuadro:
     def __init__(self, px, py, val):
         self.x = px
         self.y = py
+        self.desx = 0
+        self.desy = 0
         self.col = 255
         self.val = val
         self.par = False
@@ -34,7 +36,6 @@ class cuadro:
 #Variables Globales
 
 mat = []
-band = False
 puntaje = cuadro(220, 150, 0)
 libres = []
 
@@ -107,16 +108,37 @@ def setup():
             
                 
             
-            
+#tablero
+
+def tablero():
+    x = 25
+    y = 300
+    for i in range(4):
+        x = 25
+        for j in range(4):
+            fill(colores[0])
+            rect(x, y, 125, 125)
+            x += 125
+        y += 125
             
                 
+
+
+
+
+
+
+
 #Display  
   
 def display():
+    background(255)
+    tablero()
     global f, f2
     global puntaje
     textFont(f2)
     textAlign(CENTER)
+    fill(0)
     text("Puntaje", 275, 100)
     textAlign(CENTER, CENTER)
     textFont(f)
@@ -128,6 +150,7 @@ def display():
     for i in range(4):
         for j in range(4):
             a = mat[i][j]
+            if (a.val == 0): continue
             if (a.val > puntaje.val):
                 puntaje.val = a.val
             a.col = colores[a.val]
@@ -142,10 +165,12 @@ def display():
 
 
 
-
 #Draw
 
-def draw():     
+def draw():
+    global mat, puntaje
+    if (puntaje == 2048):
+        noLoop()
     display()
     
     
@@ -156,16 +181,6 @@ def draw():
     
     
 
-def mover(i, j, dir):
-    global mat
-    velocidad = 25
-    suma = 0
-    #delay(500)
-    if (dir == 0):
-        while (suma < 125):
-            mat[i][j].y -= velocidad
-            suma += velocidad
-            display()
 
 
 
@@ -189,13 +204,12 @@ def keyPressed():
                     mat[i - 1][j].val = mat[i][j].val
                     mat[i][j].val = 0
                     i -= 1
-                    mover(i, j, 0)
                 if (i > 0 and mat[i - 1][j].val == mat[i][j].val and mat[i - 1][j].par == False):
                     mat[i - 1][j].val *= 2
                     mat[i][j].val = 0
                     mat[i - 1][j].par = True
                 i = ci
-    elif (keyCode == DOWN):
+    if (keyCode == DOWN):
         for i in range(2, -1, -1):
             for j in range(4):
                 ci = i
@@ -208,7 +222,7 @@ def keyPressed():
                     mat[i][j].val = 0
                     mat[i + 1][j].par = True
                 i = ci
-    elif (keyCode == LEFT):
+    if (keyCode == LEFT):
         for i in range(4):
             for j in range(1, 4):
                 cj = j
@@ -221,7 +235,7 @@ def keyPressed():
                     mat[i][j].val = 0
                     mat[i][j - 1].par = True
                 j = cj
-    elif (keyCode == RIGHT):
+    if (keyCode == RIGHT):
         for i in range(4):
             for j in range(2, -1, -1):
                 cj = j

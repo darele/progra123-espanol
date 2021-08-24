@@ -3,7 +3,7 @@ def setup():
     #size(1500, 800)
     fullScreen()
     background(255)
-    f = createFont("Arial", 15, True)
+    f = createFont("DejaVu Sans", 15, True)
     textFont(f, 20)
     x = 0
     y = 20

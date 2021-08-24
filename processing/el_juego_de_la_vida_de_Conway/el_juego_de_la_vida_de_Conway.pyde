@@ -21,6 +21,7 @@ class celda:
 l = []
 tamcelda = 40
 band = False
+mensaje = "Presiona Enter para comenzar/parar simulacion\nClick para encender/apagar celdas"
 
 def setup():
     global tamcelda
@@ -29,7 +30,7 @@ def setup():
     cantidad de vecinos vivos de cada celda
     '''
     global f
-    f = createFont("Arial", 15, True)
+    f = createFont("Ubuntu Bold", 15, True)
     fullScreen()
     background(0)
     stroke(122,245,112)
@@ -69,7 +70,7 @@ def vecinosvivos(i, j):
     return cont 
 
 def draw():
-    global f
+    global f, mensaje
     textFont(f)
     delay(100)
     global tamcelda
@@ -102,7 +103,11 @@ def draw():
             la cantidad de vecinos vivos de cada celda
             '''
             #fill(0)
-            #text(str(i.vivos), a[0] + 15, a[1] + 15)    
+            #text(str(i.vivos), a[0] + 15, a[1] + 15)
+    fill(255)
+    textAlign(CENTER)
+    textSize(30)
+    text(mensaje, width/2, height/2)    
         
 def mousePressed():
     if (band == False):
@@ -117,11 +122,15 @@ def mousePressed():
             if (parar): break
             
 def keyPressed():
-    global band
+    global band, mensaje
     '''
     cambiar entre hacer modificacion
     o que comience el juego cont ENTER
     '''
     if (key == RETURN or key == ENTER):
-        if (band) : band = False
-        else : band = True
+        if (band) : 
+            band = False
+            mensaje = "Presiona Enter para comenzar/parar simulacion\nClick para encender/apagar celdas"
+        else : 
+            band = True
+            mensaje = ""

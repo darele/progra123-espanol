@@ -1,3 +1,5 @@
+
+
 def setup():
     fullScreen()
     dibujar()
@@ -28,3 +30,9 @@ def keyPressed():
         dibujar()
     elif (key == 'b' or key == 'B'):
         borrar()
+    
+    
+    
+    
+    
+    

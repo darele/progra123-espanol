@@ -1,6 +1,6 @@
 mx = 0
 my = 0
-l = []
+l = [[0,0,0,0]]
 cont = 0
 
 def setup():
