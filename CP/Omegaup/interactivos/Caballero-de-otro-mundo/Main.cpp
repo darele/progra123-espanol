@@ -1,3 +1,10 @@
+/*
+Hecho por: Progra 123 en espanol
+	https://www.youtube.com/channel/UCekalW5zvNJMVgFcenkAECA
+link al problema: https://omegaup.com/arena/problem/Caballero-de-otro-mundo/#problems
+Link al video donde lo resuelvo: https://youtu.be/1pJdZdJerVk
+*/
+
 #include "isekai.h"
 #include <iostream>
 #include <cstring>
